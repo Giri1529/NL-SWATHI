@@ -182,31 +182,36 @@ export class DatabaseStorage implements IStorage {
         title: "Review of Pancreatic Cells Trans Differentiation in Diabetes Treatment",
         journal: "Internet",
         year: "2022",
+        link: "https://www.lcebyhkzz.cn//article/view/856/328.php",
         authors: "Swathi NL, et al."
       },
       {
         title: "Personalized Interventions for Managing Diabetes Distress and Improving Glycemic Control",
         journal: "World J Pharm Res",
         year: "2024",
+        link: "https://www.wjpr.net/abstract_show/24219",
         authors: "Swathi NL, et al."
       },
       {
         title: "Precision Medicine and Epigenetics: Personalized Diabetes Care",
         journal: "IGI Global",
         year: "2024",
+        link: "https://www.igi-global.com/chapter/precision-medicine-and-epigenetics/341073",
         authors: "Swathi NL, et al."
       },
       {
         title: "Targeting the Invasion Protein A from the Type Three Secretion System of Salmonella Typhi",
         journal: "Thesis",
         year: "2024",
+        link: "https://zenodo.org/records/10826101",
         authors: "Swathi NL"
       },
       {
-        title: "Currently Trending and Futuristic Biological Modalities in the Management of Different Types of Diabetes",
-        journal: "J Popul Ther Clin Pharmacol",
-        year: "2023",
-        authors: "Ali A, ... Swathi NL, et al."
+        title: "Mindfulness Training for Cardiovascular Health in Type 2 Diabetes",
+        journal: "Current Problems in Cardiology",
+        year: "2024",
+        link: "https://doi.org/10.1016/j.cpcardiol.2024.102833",
+        authors: "Gandhi, A., ... Swathi NL."
       }
     ]);
   }
