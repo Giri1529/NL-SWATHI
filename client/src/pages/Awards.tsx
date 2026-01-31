@@ -1,22 +1,18 @@
 import { useAwards } from "@/hooks/use-portfolio";
-import { Sidebar } from "@/components/Sidebar";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
-import { Award, Calendar, BadgeCheck } from "lucide-react";
+import { Trophy, Calendar, Award } from "lucide-react";
 
 export default function Awards() {
   const { data: awards, isLoading } = useAwards();
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-      <main className="flex-1 lg:ml-72 p-6 lg:p-12 xl:p-16">
-        <div className="max-w-4xl mx-auto mt-16 lg:mt-0">
-          <SectionHeader 
-            title="Honors & Awards" 
-            subtitle="Recognition of academic and professional excellence."
-          />
+    <section id="awards" className="py-20 border-t border-slate-100">
+      <SectionHeader
+        title="Honors & Awards"
+        subtitle="Recognition of academic and professional excellence."
+      />
 
           {isLoading ? (
             <div className="grid md:grid-cols-2 gap-6">
@@ -27,7 +23,7 @@ export default function Awards() {
           ) : awards && awards.length > 0 ? (
             <div className="grid md:grid-cols-2 gap-6">
               {awards.map((award, index) => (
-                <motion.div 
+                <motion.div
                   key={award.id}
                   initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
@@ -41,13 +37,13 @@ export default function Awards() {
 
                   <div className="relative z-10">
                     <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mb-4">
-                      <BadgeCheck className="w-6 h-6" />
+                      <Trophy className="w-6 h-6" />
                     </div>
-                    
+
                     <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors pr-8">
                       {award.title}
                     </h3>
-                    
+
                     <div className="mt-2 text-sm text-slate-500 font-medium uppercase tracking-wider">
                       {award.issuer}
                     </div>
@@ -69,8 +65,6 @@ export default function Awards() {
           ) : (
             <div className="text-center py-20 text-slate-400">No awards listed.</div>
           )}
-        </div>
-      </main>
-    </div>
+    </section>
   );
 }

@@ -1,22 +1,27 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { insertMessageSchema, type InsertMessage } from "@shared/schema";
 import { useContactForm, useProfile } from "@/hooks/use-portfolio";
-import { Sidebar } from "@/components/Sidebar";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { insertMessageSchema } from "@shared/schema";
-import { z } from "zod";
 import { motion } from "framer-motion";
-import { Mail, Send, Linkedin, MapPin } from "lucide-react";
+import { Mail, Send, Linkedin, MapPin } from "lucide-react"; // Keep existing icons for now, as the instruction's code edit only goes up to SectionHeader
 
 export default function Contact() {
   const { mutate: sendMessage, isPending } = useContactForm();
   const { data: profile } = useProfile();
 
-  const form = useForm<z.infer<typeof insertMessageSchema>>({
+  const form = useForm<InsertMessage>({
     resolver: zodResolver(insertMessageSchema),
     defaultValues: {
       name: "",
@@ -25,32 +30,29 @@ export default function Contact() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof insertMessageSchema>) => {
+  const onSubmit = (data: InsertMessage) => {
     sendMessage(data, {
       onSuccess: () => form.reset(),
     });
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-      <main className="flex-1 lg:ml-72 p-6 lg:p-12 xl:p-16">
-        <div className="max-w-4xl mx-auto mt-16 lg:mt-0">
-          <SectionHeader 
-            title="Contact" 
-            subtitle="Let's connect. Feel free to reach out for collaborations or inquiries."
-          />
+    <section id="contact" className="py-20 border-t border-slate-100">
+      <SectionHeader
+        title="Contact"
+        subtitle="Let's connect. Feel free to reach out for collaborations or inquiries."
+      />
 
           <div className="grid md:grid-cols-3 gap-12 mt-12">
             {/* Contact Info */}
             <div className="md:col-span-1 space-y-8">
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
               >
                 <h3 className="text-xl font-bold font-serif mb-6 text-slate-900">Get in Touch</h3>
-                
+
                 <div className="space-y-6">
                   {profile?.email && (
                     <div className="flex items-start gap-3 text-slate-600">
@@ -90,7 +92,7 @@ export default function Contact() {
             </div>
 
             {/* Contact Form */}
-            <motion.div 
+            <motion.div
               className="md:col-span-2"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -127,7 +129,7 @@ export default function Contact() {
                         )}
                       />
                     </div>
-                    
+
                     <FormField
                       control={form.control}
                       name="message"
@@ -135,10 +137,10 @@ export default function Contact() {
                         <FormItem>
                           <FormLabel>Message</FormLabel>
                           <FormControl>
-                            <Textarea 
-                              placeholder="How can I help you?" 
-                              className="min-h-[150px] bg-slate-50 border-slate-200 focus:border-primary focus:ring-primary/20 resize-none" 
-                              {...field} 
+                            <Textarea
+                              placeholder="How can I help you?"
+                              className="min-h-[150px] bg-slate-50 border-slate-200 focus:border-primary focus:ring-primary/20 resize-none"
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />
@@ -146,8 +148,8 @@ export default function Contact() {
                       )}
                     />
 
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       className="w-full bg-primary hover:bg-primary/90 text-white font-medium py-6 rounded-xl shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:-translate-y-0.5"
                       disabled={isPending}
                     >
@@ -164,8 +166,6 @@ export default function Contact() {
               </div>
             </motion.div>
           </div>
-        </div>
-      </main>
-    </div>
+    </section>
   );
 }

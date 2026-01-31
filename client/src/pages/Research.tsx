@@ -1,5 +1,4 @@
 import { usePublications } from "@/hooks/use-portfolio";
-import { Sidebar } from "@/components/Sidebar";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
@@ -10,14 +9,11 @@ export default function Research() {
   const { data: publications, isLoading } = usePublications();
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-      <main className="flex-1 lg:ml-72 p-6 lg:p-12 xl:p-16">
-        <div className="max-w-4xl mx-auto mt-16 lg:mt-0">
-          <SectionHeader 
-            title="Research" 
-            subtitle="Publications and scholarly work."
-          />
+    <section id="research" className="py-20 border-t border-slate-100">
+      <SectionHeader
+        title="Research"
+        subtitle="Publications and scholarly work."
+      />
 
           {isLoading ? (
             <div className="space-y-6">
@@ -28,7 +24,7 @@ export default function Research() {
           ) : publications && publications.length > 0 ? (
             <div className="grid gap-6">
               {publications.map((pub, index) => (
-                <motion.div 
+                <motion.div
                   key={pub.id}
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -41,12 +37,12 @@ export default function Research() {
                       <BookOpen className="w-6 h-6 mb-1" />
                       <span className="text-xs font-bold">{pub.year || "N/A"}</span>
                     </div>
-                    
+
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors leading-snug">
                         {pub.title}
                       </h3>
-                      
+
                       <div className="mt-2 text-sm text-slate-600">
                         {pub.authors && <span className="font-medium">{pub.authors}</span>}
                       </div>
@@ -79,8 +75,6 @@ export default function Research() {
           ) : (
             <div className="text-center py-20 text-slate-400">No publications found.</div>
           )}
-        </div>
-      </main>
-    </div>
+    </section>
   );
 }

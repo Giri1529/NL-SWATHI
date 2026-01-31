@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Account for fixed navigation bar */
+}
+
 :root {
   /* Academic/Professional Palette */
   /* Primary: Deep Teal/Slate Blue */
@@ -39,6 +44,7 @@
   
   --font-serif: 'Playfair Display', serif;
   --font-sans: 'Lato', sans-serif;
+  --primary-rgb: 14, 116, 144; /* Teal primary in RGB */
 }
 
 @layer base {
@@ -71,6 +77,61 @@
 
   .section-reveal {
     @apply opacity-0 translate-y-8 animate-[reveal_0.8s_ease-out_forwards];
+  }
+
+  /* Gradient utilities for sections */
+  .gradient-hero {
+    @apply bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800;
+  }
+
+  .gradient-education {
+    @apply bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50;
+  }
+
+  .gradient-experience {
+    @apply bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50;
+  }
+
+  .gradient-research {
+    @apply bg-gradient-to-br from-violet-50 via-purple-50 to-fuchsia-50;
+  }
+
+  .gradient-awards {
+    @apply bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50;
+  }
+
+  .gradient-contact {
+    @apply bg-gradient-to-br from-slate-800 via-slate-900 to-primary/80;
+  }
+
+  /* Performance optimizations */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  /* GPU acceleration for smooth animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Radial gradient for hero background */
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+
+  /* Hide scrollbar utility */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 

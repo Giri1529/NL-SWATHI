@@ -1,5 +1,4 @@
 import { useExperience } from "@/hooks/use-portfolio";
-import { Sidebar } from "@/components/Sidebar";
 import { SectionHeader } from "@/components/SectionHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
@@ -9,14 +8,11 @@ export default function Experience() {
   const { data: experience, isLoading } = useExperience();
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar />
-      <main className="flex-1 lg:ml-72 p-6 lg:p-12 xl:p-16">
-        <div className="max-w-4xl mx-auto mt-16 lg:mt-0">
-          <SectionHeader 
-            title="Experience" 
-            subtitle="Professional roles and contributions."
-          />
+    <section id="experience" className="py-20 border-t border-slate-100">
+      <SectionHeader
+        title="Experience"
+        subtitle="Professional roles and contributions."
+      />
 
           {isLoading ? (
             <div className="space-y-6">
@@ -27,7 +23,7 @@ export default function Experience() {
           ) : experience && experience.length > 0 ? (
             <div className="space-y-6">
               {experience.map((exp, index) => (
-                <motion.div 
+                <motion.div
                   key={exp.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -48,7 +44,7 @@ export default function Experience() {
                       {exp.period}
                     </div>
                   </div>
-                  
+
                   {exp.description && (
                     <div className="prose prose-slate prose-sm max-w-none text-slate-600">
                       <p className="whitespace-pre-line leading-relaxed">
@@ -62,8 +58,6 @@ export default function Experience() {
           ) : (
             <div className="text-center py-20 text-slate-400">Experience history not available.</div>
           )}
-        </div>
-      </main>
-    </div>
+    </section>
   );
 }

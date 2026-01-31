@@ -82,3 +82,4 @@ export type Skill = typeof skills.$inferSelect;
 export type Award = typeof awards.$inferSelect;
 export type Publication = typeof publications.$inferSelect;
 export type Message = typeof messages.$inferSelect;
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
