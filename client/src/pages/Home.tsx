@@ -1,15 +1,18 @@
 import { useProfile, useSkills } from "@/hooks/use-portfolio";
-import BubbleMenu from "@/components/BubbleMenu";
+import Navbar from "@/components/NavigationBar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
-import { ExternalLink, Linkedin, Mail, MapPin } from "lucide-react";
+import { ExternalLink, Linkedin, Mail, MapPin, Search } from "lucide-react";
+import { SiOrcid, SiScopus } from "react-icons/si";
 import { Badge } from "@/components/ui/badge";
 import Education from "./Education";
 import Experience from "./Experience";
 import Research from "./Research";
 import Awards from "./Awards";
 import Contact from "./Contact";
+import { ProjectShowcase } from "@/components/ui/project-showcase";
+import { InvitedTalks } from "@/components/ui/invited-talks";
 
 export default function Home() {
     const { data: profile, isLoading: isProfileLoading } = useProfile();
@@ -30,14 +33,38 @@ export default function Home() {
         show: { opacity: 1, y: 0 }
     };
 
+    // Helper function to handle link formatting
+    const getFullUrl = (value: string | undefined | null, type: 'orcid' | 'scopus' | 'researchid') => {
+        if (!value) {
+            // Return default fallbacks
+            switch (type) {
+                case 'orcid': return "https://orcid.org/my-orcid?orcid=0000-0002-3695-0732";
+                case 'scopus': return "https://www.scopus.com/authid/detail.uri?authorId=58336556300";
+                case 'researchid': return "https://researchid.co/nl.swathi";
+                default: return "#";
+            }
+        }
+
+        // If it's already a URL, return it
+        if (value.startsWith('http')) return value;
+
+        // Otherwise, construct the full URL based on type
+        switch (type) {
+            case 'orcid': return `https://orcid.org/my-orcid?orcid=${value}`;
+            case 'scopus': return `https://www.scopus.com/authid/detail.uri?authorId=${value}`;
+            case 'researchid': return value.includes('.') ? `https://researchid.co/${value}` : value;
+            default: return value;
+        }
+    };
+
     return (
         <div className="min-h-screen bg-slate-50 relative">
-            <BubbleMenu />
+            <Navbar />
             <main className="flex-1 p-6 lg:p-12 xl:p-16">
                 <div className="max-w-4xl mx-auto mt-16 lg:mt-0">
 
                     {/* Hero Section */}
-                    <section id="about" className="min-h-[60vh] flex flex-col justify-center">
+                    <section id="home" className="min-h-[60vh] flex flex-col justify-center">
                         {isProfileLoading ? (
                             <div className="space-y-4">
                                 <Skeleton className="h-12 w-3/4" />
@@ -69,11 +96,23 @@ export default function Home() {
                                         <span>{profile.location}</span>
                                     </div>
                                     {profile.linkedin && (
-                                        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+                                        <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors" title="LinkedIn Profile">
                                             <Linkedin className="w-4 h-4" />
                                             <span>LinkedIn</span>
                                         </a>
                                     )}
+                                    <a href={getFullUrl(profile.orcid, 'orcid')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors" title="ORCID Profile">
+                                        <SiOrcid className="w-4 h-4" />
+                                        <span>ORCID</span>
+                                    </a>
+                                    <a href={getFullUrl(profile.scopus, 'scopus')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors" title="Scopus Profile">
+                                        <SiScopus className="w-4 h-4" />
+                                        <span>Scopus</span>
+                                    </a>
+                                    <a href={getFullUrl(profile.researchid, 'researchid')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors" title="ResearchID Profile">
+                                        <Search className="w-4 h-4" />
+                                        <span>ResearchID</span>
+                                    </a>
                                     <a href={`mailto:${profile.email}`} className="flex items-center gap-2 hover:text-primary transition-colors">
                                         <Mail className="w-4 h-4" />
                                         <span>{profile.email}</span>
@@ -142,6 +181,8 @@ export default function Home() {
 
                     <Education />
                     <Experience />
+                    <ProjectShowcase />
+                    <InvitedTalks />
                     <Research />
                     <Awards />
                     <Contact />

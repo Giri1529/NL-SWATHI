@@ -15,10 +15,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
   MapPin, Linkedin, Mail, Send, GraduationCap, Calendar,
-  Briefcase, BookOpen, ExternalLink, Trophy, Award, Mic, Users
+  Briefcase, BookOpen, ExternalLink, Trophy, Award, Mic, Users,
+  Search, FileText
 } from 'lucide-react';
+import { SiOrcid, SiScopus } from 'react-icons/si';
 import { ReleaseTimeLine, type TimelineEntry as ReleaseTimelineEntry } from '@/components/ui/release-time-line';
 import { EducationTimeline, type TimelineEntry as EducationTimelineEntry } from "@/components/ui/education-timeline";
+import { InvitedTalks } from '@/components/ui/invited-talks';
 
 // Animation variants
 const fadeInUp = {
@@ -38,6 +41,31 @@ const scaleIn = {
   hidden: { opacity: 0, scale: 0.9 },
   visible: { opacity: 1, scale: 1 }
 };
+
+// Helper function to handle link formatting
+const getFullUrl = (value: string | undefined | null, type: 'orcid' | 'scopus' | 'researchid') => {
+  if (!value) {
+    // Return default fallbacks
+    switch (type) {
+      case 'orcid': return "https://orcid.org/my-orcid?orcid=0000-0002-3695-0732";
+      case 'scopus': return "https://www.scopus.com/authid/detail.uri?authorId=58336556300";
+      case 'researchid': return "https://researchid.co/nl.swathi";
+      default: return "#";
+    }
+  }
+
+  // If it's already a URL, return it
+  if (value.startsWith('http')) return value;
+
+  // Otherwise, construct the full URL based on type
+  switch (type) {
+    case 'orcid': return `https://orcid.org/my-orcid?orcid=${value}`;
+    case 'scopus': return `https://www.scopus.com/authid/detail.uri?authorId=${value}`;
+    case 'researchid': return value.includes('.') ? `https://researchid.co/${value}` : value;
+    default: return value;
+  }
+};
+
 
 // ===== HERO SECTION =====
 function HeroSection() {
@@ -107,11 +135,23 @@ function HeroSection() {
                 {profile.location}
               </span>
               {profile.linkedin && (
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors" title="LinkedIn Profile">
                   <Linkedin className="w-4 h-4" />
                   LinkedIn
                 </a>
               )}
+              <a href={getFullUrl(profile?.orcid, 'orcid')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors" title="ORCID Profile">
+                <SiOrcid className="w-4 h-4" />
+                ORCID
+              </a>
+              <a href={getFullUrl(profile?.scopus, 'scopus')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors" title="Scopus Profile">
+                <SiScopus className="w-4 h-4" />
+                Scopus
+              </a>
+              <a href={getFullUrl(profile?.researchid, 'researchid')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors" title="ResearchID Profile">
+                <Search className="w-4 h-4" />
+                ResearchID
+              </a>
               <a href={`mailto:${profile.email}`} className="flex items-center gap-2 hover:text-white transition-colors">
                 <Mail className="w-4 h-4" />
                 {profile.email}
@@ -327,146 +367,7 @@ function ExperienceSection() {
   );
 }
 
-// ===== INVITED TALKS SECTION =====
-interface InvitedTalk {
-  id: number;
-  title: string;
-  event: string;
-  venue?: string;
-  audience: string;
-  audienceCount?: number;
-  description: string;
-  link?: string;
-}
-
-const invitedTalks: InvitedTalk[] = [
-  {
-    id: 1,
-    title: "Sharing Experiences in Clinical Research",
-    event: "Internship Program",
-    venue: "Believers Church Medical College",
-    audience: "Pharm D interns",
-    description: "Delivered an inspiring talk on experiences in clinical research, emphasizing its importance and impact.",
-  },
-  {
-    id: 2,
-    title: "Insights into Pharm D Career Opportunities",
-    event: "Career Guidance Session",
-    venue: "Invited by Dr. Jeffry Winner",
-    audience: "Aspiring Pharm D professionals",
-    description: "Shared insights about the Pharm D program, including career opportunities, advantages, and challenges.",
-  },
-  {
-    id: 3,
-    title: "Career Path and Achievements",
-    event: "Featured Speaker at CLIMED",
-    audience: "Healthcare professionals",
-    audienceCount: 200,
-    description: "Selected as Best Intern at CLIMED, addressed audience sharing career path and professional insights.",
-    link: "https://example.com/interview"
-  },
-  {
-    id: 4,
-    title: "Reading Habits in Young Minds",
-    event: "Guest Lecture",
-    venue: "Karpagam College of Pharmacy, Coimbatore",
-    audience: "Professors and students",
-    audienceCount: 300,
-    description: "Invited speaker session on cultivating reading habits among pharmacy students.",
-  },
-  {
-    id: 5,
-    title: "Scientific Training and Writing",
-    event: "Workshop Session",
-    venue: "Sri Venkateswara College of Pharmacy",
-    audience: "Pharmacy students",
-    description: "Interactive session on scientific training methodologies and academic writing skills.",
-  }
-];
-
-function TalkCard({ talk, index }: { talk: InvitedTalk; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
-      viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-lg transition-all group"
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
-          <Mic className="w-6 h-6" />
-        </div>
-        {talk.audienceCount && (
-          <Badge variant="secondary" className="gap-1 bg-slate-100 text-slate-700">
-            <Users className="w-3 h-3" />
-            {talk.audienceCount}+
-          </Badge>
-        )}
-      </div>
-      
-      <h3 className="text-lg font-serif font-bold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors mb-2">
-        {talk.title}
-      </h3>
-      
-      <div className="text-sm text-primary font-medium mb-1">
-        {talk.event}
-      </div>
-      {talk.venue && (
-        <div className="text-sm text-slate-500 mb-3 flex items-center gap-1">
-          <MapPin className="w-3 h-3" />
-          {talk.venue}
-        </div>
-      )}
-      
-      <div className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3">
-        Audience: {talk.audience}
-      </div>
-      
-      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-        {talk.description}
-      </p>
-      
-      {talk.link && (
-        <a 
-          href={talk.link} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 mt-4 text-sm font-bold text-primary hover:underline"
-        >
-          Watch Interview <ExternalLink className="w-3 h-3" />
-        </a>
-      )}
-    </motion.div>
-  );
-}
-
-function InvitedTalksSection() {
-  return (
-    <section id="talks" className="py-24 px-6 bg-slate-50 dark:bg-slate-950">
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
-          variants={fadeInUp}
-        >
-          <SectionHeader
-            title="Invited Talks"
-            subtitle="Sharing knowledge and inspiring future healthcare professionals across academic and clinical settings."
-          />
-        </motion.div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
-          {invitedTalks.map((talk, index) => (
-            <TalkCard key={talk.id} talk={talk} index={index} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+// Redundant local InvitedTalksSection removed
 function PublicationCard({ pub, index }: { pub: any; index: number }) {
   return (
     <motion.div
@@ -484,7 +385,7 @@ function PublicationCard({ pub, index }: { pub: any; index: number }) {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-violet-500/10 to-transparent" />
         {/* Grid/Dot Pattern Overlay */}
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
-        
+
         {/* Year Badge */}
         <div className="absolute top-4 left-4">
           <Badge className="bg-white/10 backdrop-blur-md text-white border-white/20 px-3 py-1">
@@ -518,13 +419,13 @@ function PublicationCard({ pub, index }: { pub: any; index: number }) {
 
         {pub.link && (
           <div className="mt-4 flex items-center justify-between">
-            <a 
-              href={pub.link} 
-              target="_blank" 
+            <a
+              href={pub.link}
+              target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors group/link"
             >
-              Read Publication 
+              Read Publication
               <motion.span
                 animate={{ x: [0, 4, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
@@ -553,9 +454,9 @@ function ScrollProgressBar({ progress }: { progress: any }) {
 function ResearchSection() {
   const { data: publications, isLoading } = usePublications();
   const sectionRef = useRef<HTMLDivElement>(null);
-  
+
   const cardCount = publications?.length || 3;
-  
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"]
@@ -565,15 +466,15 @@ function ResearchSection() {
   // We want to scroll from 0 to -(totalWidth - viewportWidth)
   // Approximate total width: cards (450px max) + gaps (24px)
   const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${(cardCount - 1) * 25}%`]);
-  
+
   // Refined x calculation based on viewport
   // For better accuracy, we can use a more dynamic approach if needed, 
   // but for now, we'll map progress to a negative percentage
   const horizontalX = useTransform(scrollYProgress, [0, 1], ["0px", `-${(cardCount * 450) - 800}px`]);
 
   return (
-    <section 
-      id="research" 
+    <section
+      id="research"
       ref={sectionRef}
       className="relative"
       style={{ height: `${100 + (cardCount * 50)}vh` }}
@@ -756,6 +657,35 @@ function ContactSection() {
                 </div>
               </div>
             )}
+            <div className="flex items-start gap-3">
+              <SiOrcid className="w-5 h-5 mt-1 text-primary/80" />
+              <div>
+                <p className="font-medium text-white">ORCID</p>
+                <a href={getFullUrl(profile?.orcid, 'orcid')} target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition-colors">
+                  View Research Profile
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <SiScopus className="w-5 h-5 mt-1 text-primary/80" />
+              <div>
+                <p className="font-medium text-white">Scopus</p>
+                <a href={getFullUrl(profile?.scopus, 'scopus')} target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition-colors">
+                  View Scopus Profile
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <Search className="w-5 h-5 mt-1 text-primary/80" />
+              <div>
+                <p className="font-medium text-white">ResearchID</p>
+                <a href={getFullUrl(profile?.researchid, 'researchid')} target="_blank" rel="noopener noreferrer" className="text-sm text-white/70 hover:text-white transition-colors">
+                  View Researcher Profiles
+                </a>
+              </div>
+            </div>
           </motion.div>
 
           {/* Contact Form */}
@@ -833,6 +763,22 @@ function ContactSection() {
           transition={{ delay: 0.5 }}
           className="mt-16 pt-8 border-t border-white/10 text-center text-white/50 text-sm"
         >
+          <div className="flex justify-center gap-6 mb-4">
+            {profile?.linkedin && (
+              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors" title="LinkedIn">
+                <Linkedin className="w-5 h-5" />
+              </a>
+            )}
+            <a href={getFullUrl(profile?.orcid, 'orcid')} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors" title="ORCID">
+              <SiOrcid className="w-5 h-5" />
+            </a>
+            <a href={getFullUrl(profile?.scopus, 'scopus')} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors" title="Scopus">
+              <SiScopus className="w-5 h-5" />
+            </a>
+            <a href={getFullUrl(profile?.researchid, 'researchid')} target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white transition-colors" title="ResearchID">
+              <Search className="w-5 h-5" />
+            </a>
+          </div>
           <p>&copy; {new Date().getFullYear()} NL. Swathi. All rights reserved.</p>
         </motion.div>
       </div>
@@ -846,7 +792,7 @@ export default function SinglePagePortfolio() {
     <div className="relative">
       <Navbar />
       <SectionDotNav />
-      
+
       <main>
         <section id="home">
           <HeroSection />
@@ -861,7 +807,7 @@ export default function SinglePagePortfolio() {
           <ResearchSection />
         </section>
         <section id="talks">
-          <InvitedTalksSection />
+          <InvitedTalks />
         </section>
         <section id="awards">
           <AwardsSection />

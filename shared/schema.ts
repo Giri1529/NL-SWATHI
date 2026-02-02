@@ -14,6 +14,7 @@ export const profile = pgTable("profile", {
   linkedin: text("linkedin"),
   orcid: text("orcid"),
   scopus: text("scopus"),
+  researchid: text("researchid"),
 });
 
 export const education = pgTable("education", {

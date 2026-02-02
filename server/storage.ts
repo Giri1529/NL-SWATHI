@@ -70,8 +70,9 @@ export class DatabaseStorage implements IStorage {
       email: "nlswathi2001@gmail.com",
       location: "Chittoor, Andhra Pradesh, India",
       linkedin: "https://linkedin.com/in/swathi-naraganti-06ba64203",
-      orcid: "0000-0002-3695-0732",
-      scopus: "58336556300"
+      orcid: "https://orcid.org/my-orcid?orcid=0000-0002-3695-0732",
+      scopus: "https://www.scopus.com/authid/detail.uri?authorId=58336556300",
+      researchid: "https://researchid.co/nl.swathi"
     });
 
     // Seed Education
@@ -276,8 +277,9 @@ export class MemStorage implements IStorage {
       email: "nlswathi2001@gmail.com",
       location: "Chittoor, Andhra Pradesh, India",
       linkedin: "https://linkedin.com/in/swathi-naraganti-06ba64203",
-      orcid: "0000-0002-3695-0732",
-      scopus: "58336556300"
+      orcid: "https://orcid.org/0000-0002-3695-0732",
+      scopus: "https://www.scopus.com/authid/detail.uri?authorId=58336556300",
+      researchid: "https://researchid.co/nl.swathi"
     };
 
     this.education = [

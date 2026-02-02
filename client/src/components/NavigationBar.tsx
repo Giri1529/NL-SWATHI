@@ -38,7 +38,7 @@ const NavLink = ({ item, isHovered, onHover, onLeave, isActive }: NavLinkProps) 
       }
     }, 10);
   };
-  
+
   return (
     <li className="relative">
       <a
@@ -66,10 +66,10 @@ const NavLink = ({ item, isHovered, onHover, onLeave, isActive }: NavLinkProps) 
             />
           )}
         </AnimatePresence>
-        
+
         <span className="relative z-10">{item.label}</span>
       </a>
-      
+
       {/* Tooltip */}
       <AnimatePresence>
         {isHovered && (
@@ -123,7 +123,7 @@ const MobileMenu = ({ isOpen, onClose, navItems }: MobileMenuProps) => {
       setTimeout(closeMenu, 100);
     }
   };
-  
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -184,7 +184,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -195,14 +195,14 @@ export default function Navbar() {
       (entries: IntersectionObserverEntry[]) => {
         let bestEntry: IntersectionObserverEntry | null = null;
         let highestRatio = 0;
-        
+
         entries.forEach((entry) => {
           if (entry.intersectionRatio > highestRatio) {
             highestRatio = entry.intersectionRatio;
             bestEntry = entry;
           }
         });
-        
+
         if (bestEntry) {
           const targetId = bestEntry.target.getAttribute('id');
           if (targetId) {
@@ -223,19 +223,17 @@ export default function Navbar() {
 
   return (
     <header className={cn(
-      "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-full max-w-4xl",
-      scrolled 
-        ? "bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl shadow-md" 
-        : "bg-transparent"
+      "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-full max-w-4xl rounded-full border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-xl overflow-hidden",
+      scrolled
+        ? "bg-white/90 dark:bg-slate-950/90 shadow-lg"
+        : "bg-white/60 dark:bg-slate-900/60"
     )}>
-      {/* Glassmorphism background */}
-      <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl rounded-full border border-slate-200/50 dark:border-slate-700/50" />
-      
+
       <nav className="relative px-6 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a 
-            href="#home" 
+          <a
+            href="#home"
             onClick={(e) => {
               e.preventDefault();
               // Add a small delay to ensure the scroll works properly
@@ -250,11 +248,11 @@ export default function Navbar() {
           >
             NLS
           </a>
-          
+
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
-              <NavLink 
+              <NavLink
                 key={item.href}
                 item={item}
                 isHovered={hoveredItem === item.href}
@@ -264,20 +262,20 @@ export default function Navbar() {
               />
             ))}
           </ul>
-          
+
           {/* Mobile Menu Button */}
-          <MobileMenuButton 
-            isOpen={mobileMenuOpen} 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+          <MobileMenuButton
+            isOpen={mobileMenuOpen}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           />
         </div>
       </nav>
-      
+
       {/* Mobile Menu */}
-      <MobileMenu 
-        isOpen={mobileMenuOpen} 
-        onClose={() => setMobileMenuOpen(false)} 
-        navItems={navItems} 
+      <MobileMenu
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        navItems={navItems}
       />
     </header>
   );
@@ -290,8 +288,8 @@ interface PageTransitionProps {
   color?: string;
 }
 
-export function PageTransition({ 
-  isActive, 
+export function PageTransition({
+  isActive,
   origin,
   color = "bg-slate-900 dark:bg-slate-100"
 }: PageTransitionProps) {
@@ -300,11 +298,11 @@ export function PageTransition({
       {isActive && (
         <motion.div
           className={`fixed inset-0 z-[100] pointer-events-none ${color}`}
-          initial={{ 
-            clipPath: `circle(0% at ${origin.x}px ${origin.y}px)` 
+          initial={{
+            clipPath: `circle(0% at ${origin.x}px ${origin.y}px)`
           }}
-          animate={{ 
-            clipPath: isActive 
+          animate={{
+            clipPath: isActive
               ? `circle(150% at ${origin.x}px ${origin.y}px)`
               : `circle(0% at ${origin.x}px ${origin.y}px)`
           }}
@@ -323,16 +321,16 @@ export function usePageTransition() {
   const [targetSection, setTargetSection] = useState<string | null>(null);
 
   const navigateWithTransition = useCallback((
-    href: string, 
+    href: string,
     event: React.MouseEvent
   ) => {
     event.preventDefault();
-    
+
     // Capture click position for circle reveal
     setTransitionOrigin({ x: event.clientX, y: event.clientY });
     setTargetSection(href);
     setIsTransitioning(true);
-    
+
     // After transition completes, scroll to section
     setTimeout(() => {
       setTimeout(() => {
@@ -341,7 +339,7 @@ export function usePageTransition() {
           element.scrollIntoView({ behavior: "smooth" });
         }
       }, 10);
-      
+
       // Reverse transition
       setTimeout(() => {
         setIsTransitioning(false);
