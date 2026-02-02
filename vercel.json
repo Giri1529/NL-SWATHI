@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "public": "dist/public",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -7,7 +10,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/api/index"
+      "destination": "/index.html"
     }
   ],
   "functions": {
@@ -15,5 +18,16 @@
       "includeFiles": "dist/public/**",
       "maxDuration": 60
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "cache-control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
