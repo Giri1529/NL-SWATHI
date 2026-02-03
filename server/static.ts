@@ -3,13 +3,19 @@ import fs from "fs";
 import path from "path";
 
 export function serveStatic(app: Express) {
-  // Try to find the public directory in multiple possible locations
-  // 1. Local/Standard build: ./public relative to this file
-  // 2. Vercel/Root execution: ./dist/public relative to cwd
+  // On Vercel, we don't need to serve static files from the Express app
+  // because Vercel serves them directly from the output directory.
+  // This avoids path resolution issues and potential catch-all conflicts.
+  if (process.env.VERCEL) {
+    console.log("Running on Vercel: skipping Express static file serving.");
+    return;
+  }
+
   const possiblePaths = [
     path.resolve(__dirname, "public"),
     path.resolve(process.cwd(), "dist", "public"),
-    path.resolve(process.cwd(), "public") // Fallback
+    path.resolve(process.cwd(), "public"),
+    path.resolve(__dirname, "..", "dist", "public"),
   ];
 
   let distPath = "";
@@ -22,10 +28,7 @@ export function serveStatic(app: Express) {
 
   if (!distPath) {
     console.warn(`Could not find the build directory. Checked: ${possiblePaths.join(", ")}`);
-    // Create a dummy endpoint to avoid crashing, just send a simple message
-    app.use("/{*path}", (_req, res) => {
-      res.status(404).json({ message: "Static content not found - check build logs" });
-    });
+    // Fallback for cases where static build is missing but we're not on Vercel
     return;
   }
 

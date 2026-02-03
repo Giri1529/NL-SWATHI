@@ -61,5 +61,20 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/health", async (_req, res) => {
+    try {
+      const profile = await storage.getProfile();
+      res.json({
+        status: "ok",
+        storage: process.env.DATABASE_URL ? "database" : "memory",
+        hasProfile: !!profile,
+        vercel: !!process.env.VERCEL,
+        nodeEnv: process.env.NODE_ENV,
+      });
+    } catch (err) {
+      res.status(500).json({ status: "error", message: (err as Error).message });
+    }
+  });
+
   return httpServer;
 }
