@@ -98,22 +98,12 @@ interface MobileMenuButtonProps {
 const MobileMenuButton = ({ isOpen, onClick }: MobileMenuButtonProps) => {
   return (
     <button
-      className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 relative z-[60]"
+      className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5"
       onClick={onClick}
-      aria-label={isOpen ? "Close menu" : "Open menu"}
     >
-      <span className={cn(
-        "w-6 h-0.5 bg-slate-700 dark:bg-slate-300 transition-all duration-300",
-        isOpen ? "rotate-45 translate-y-[7px]" : ""
-      )} />
-      <span className={cn(
-        "w-6 h-0.5 bg-slate-700 dark:bg-slate-300 transition-all duration-300",
-        isOpen ? "opacity-0" : ""
-      )} />
-      <span className={cn(
-        "w-6 h-0.5 bg-slate-700 dark:bg-slate-300 transition-all duration-300",
-        isOpen ? "-rotate-45 -translate-y-[7px]" : ""
-      )} />
+      <span className={`w-6 h-0.5 bg-slate-700 dark:bg-slate-300 transition-transform ${isOpen ? 'rotate-45 translate-y-2' : ''}`} />
+      <span className={`w-6 h-0.5 bg-slate-700 dark:bg-slate-300 transition-opacity ${isOpen ? 'opacity-0' : ''}`} />
+      <span className={`w-6 h-0.5 bg-slate-700 dark:bg-slate-300 transition-transform ${isOpen ? '-rotate-45 -translate-y-2' : ''}`} />
     </button>
   );
 };
@@ -214,8 +204,7 @@ export default function Navbar() {
         });
 
         if (bestEntry) {
-          const entry = bestEntry as IntersectionObserverEntry;
-          const targetId = entry.target.getAttribute('id');
+          const targetId = bestEntry.target.getAttribute('id');
           if (targetId) {
             setActiveItem(targetId);
           }
@@ -234,10 +223,10 @@ export default function Navbar() {
 
   return (
     <header className={cn(
-      "fixed top-4 left-1/2 -translate-x-1/2 z-[60] transition-all duration-500 w-[92%] sm:w-full max-w-4xl rounded-full border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-xl overflow-hidden",
+      "fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-full max-w-4xl rounded-full border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-xl overflow-hidden",
       scrolled
-        ? "bg-white/90 dark:bg-slate-950/90 shadow-xl py-1"
-        : "bg-white/60 dark:bg-slate-900/60 py-2"
+        ? "bg-white/90 dark:bg-slate-950/90 shadow-lg"
+        : "bg-white/60 dark:bg-slate-900/60"
     )}>
 
       <nav className="relative px-6 py-3">

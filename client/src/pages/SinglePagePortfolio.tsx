@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { insertMessageSchema, type InsertMessage } from '@shared/schema';
 import SectionDotNav from '@/components/SectionDotNav';
 import Navbar from '@/components/NavigationBar';
-import BubbleMenu from '@/components/BubbleMenu';
 import { SectionHeader } from '@/components/SectionHeader';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -78,7 +77,7 @@ function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800 pt-20 md:pt-0"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800"
     >
       {/* Parallax background elements */}
       <motion.div
@@ -465,23 +464,23 @@ function ResearchSection() {
 
   // Calculate horizontal translation
   // We want to scroll from 0 to -(totalWidth - viewportWidth)
-  // Approximate total width: cards (450px max) + gaps (24px)
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${(cardCount - 1) * 25}%`]);
-
-  // Refined x calculation based on viewport
-  // We want to scroll from 0 to -(totalWidth - viewportWidth)
-  // We use a percentage-based transform that's more responsive
-  const horizontalX = useTransform(scrollYProgress, [0, 1], ["0%", `-${(cardCount - 1) * 75}%`]);
+  // Higher vertical height = more scroll distance = slower transition speed
+  const horizontalX = useTransform(
+    scrollYProgress,
+    [0.1, 0.9], // Start a bit after enter and end a bit before leave for better feel
+    ["0px", `-${(cardCount * 474) - 800}px`] // Adjusted for a smoother finish
+  );
 
   return (
     <section
       id="research"
       ref={sectionRef}
       className="relative"
-      style={{ height: `${100 + (cardCount * 50)}vh` }}
+      // Height increased from 50vh per card to 100vh per card for slower, natural scroll speed
+      style={{ height: `${100 + (cardCount * 100)}vh` }}
     >
-      <div className="sticky top-0 h-screen w-full bg-gradient-to-br from-violet-50 via-purple-50 to-fuchsia-50 overflow-hidden flex flex-col justify-center">
-        <div className="max-w-4xl mx-auto px-6 mb-12">
+      <div className="sticky top-0 h-screen w-full bg-gradient-to-br from-violet-50 via-purple-50 to-fuchsia-50 overflow-hidden flex flex-col pt-32">
+        <div className="max-w-4xl mx-auto px-6 mb-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -792,7 +791,6 @@ export default function SinglePagePortfolio() {
   return (
     <div className="relative">
       <Navbar />
-      <BubbleMenu />
       <SectionDotNav />
 
       <main>
