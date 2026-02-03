@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { insertMessageSchema, type InsertMessage } from '@shared/schema';
 import SectionDotNav from '@/components/SectionDotNav';
 import Navbar from '@/components/NavigationBar';
+import BubbleMenu from '@/components/BubbleMenu';
 import { SectionHeader } from '@/components/SectionHeader';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -77,7 +78,7 @@ function HeroSection() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800 pt-20 md:pt-0"
     >
       {/* Parallax background elements */}
       <motion.div
@@ -468,9 +469,9 @@ function ResearchSection() {
   const x = useTransform(scrollYProgress, [0, 1], ["0%", `-${(cardCount - 1) * 25}%`]);
 
   // Refined x calculation based on viewport
-  // For better accuracy, we can use a more dynamic approach if needed, 
-  // but for now, we'll map progress to a negative percentage
-  const horizontalX = useTransform(scrollYProgress, [0, 1], ["0px", `-${(cardCount * 450) - 800}px`]);
+  // We want to scroll from 0 to -(totalWidth - viewportWidth)
+  // We use a percentage-based transform that's more responsive
+  const horizontalX = useTransform(scrollYProgress, [0, 1], ["0%", `-${(cardCount - 1) * 75}%`]);
 
   return (
     <section
@@ -791,6 +792,7 @@ export default function SinglePagePortfolio() {
   return (
     <div className="relative">
       <Navbar />
+      <BubbleMenu />
       <SectionDotNav />
 
       <main>
